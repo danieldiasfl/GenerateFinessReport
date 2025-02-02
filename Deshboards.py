@@ -31,8 +31,9 @@ class Dashboards:
         self.create_ranking_accumulated(rankings.get_accumulated_individual())
         self.create_ranking_accumulated_group(rankings.get_accumulated_group())
         self.create_shame_wall(rankings.get_failed_individual())
+        self.create_carregados(rankings.get_carregados())
         
-        
+
     def create_ranking_individual (self, ranking):
         first_exercises = ranking[0]["exercises"]
         first_place = ([member['name'] for member in ranking if member['exercises'] == first_exercises])
@@ -66,9 +67,7 @@ class Dashboards:
         self.create_window_ranking_individual_accum(first_exercises, first_place, second_exercises, second_place, third_exercises, third_place, self.canvas)        
         
     def create_ranking_accumulated_group (self, ranking):
-        print (ranking)
         first_exercises = ranking[0][1]
-        print(first_exercises)
         first_place = ([member[0] for member in ranking if member[1] == first_exercises])
 
         second_index = 0 + len(first_place)
@@ -87,6 +86,9 @@ class Dashboards:
     def create_shame_wall(self, shame_people):
         self.create_window_shame(shame_people)
     
+    def create_carregados(self, carregados):
+        self.create_window_carregados(carregados)
+        
     def create_window_ranking_individual (self, first_exercises, first_place, second_exercises, second_place, third_exercises, third_place, canvas):
         self.canvas.delete("all")
         podium_bg = self.load_image("pics/podio.jpg", size=(1200, 800))
@@ -99,14 +101,14 @@ class Dashboards:
 
         member_images = []
 
-        self.createImages(first_place, 550, 140, self.canvas, member_images, 0, 0, 0)
+        self.createImages(first_place, 600, 280, 200, self.canvas, member_images, 0, 0, 0, 0)
         self.canvas.create_text(600, 410, text=str(first_exercises) + " exercicios", font=("arial.ttf", 20, "bold"), fill="black")
 
-        self.createImages(second_place, 280, 190, self.canvas, member_images, 0, 0, 0)  
+        self.createImages(second_place, 330, 350, 200, self.canvas, member_images, 0, 0, 0, 0)  
         self.canvas.create_text(330, 480, text=str(second_exercises) + " exercicios", font=("arial.ttf", 20, "bold"), fill="black")
         
         self.canvas.create_text(880, 510, text=str(third_exercises) + " exercicios", font=("arial.ttf", 20, "bold"), fill="black")
-        self.createImages(third_place, 815, 250, self.canvas, member_images, 0, 0, 0)
+        self.createImages(third_place, 880, 380, 200, self.canvas, member_images, 0, 0, 0, 0)
 
         self.save_canvas_as_image(self.canvas, str(self.week) + "/rankingIndividual.jpg")
         
@@ -119,18 +121,17 @@ class Dashboards:
         self.canvas.create_text(600, 80, text="Ranking Geral Individual", font=("arial.ttf", 61, "bold"), fill="gray")
         self.canvas.create_text(600, 80, text="Ranking Geral Individual", font=("arial.ttf", 60, "bold"), fill="white")
         self.canvas.create_line(100, 115, 1100, 115, fill="white", width=2)
-        
 
         member_images = []
 
-        self.createImages(first_place, 550, 140, self.canvas, member_images, 0, 0, 0)
+        self.createImages(first_place, 600, 280, 200, self.canvas, member_images, 0, 0, 0, 0)
         self.canvas.create_text(600, 410, text=str(first_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
 
-        self.createImages(second_place, 280, 190, self.canvas, member_images, 0, 0, 0)  
+        self.createImages(second_place, 330, 350, 200, self.canvas, member_images, 0, 0, 0, 0)  
         self.canvas.create_text(330, 480, text=str(second_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
         
         self.canvas.create_text(880, 510, text=str(third_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
-        self.createImages(third_place, 815, 250, self.canvas, member_images, 0, 0, 0)
+        self.createImages(third_place, 880, 380, 200, self.canvas, member_images, 0, 0, 0, 0)
 
         self.save_canvas_as_image(self.canvas, str(self.week) + "/rankingIndividualAccum.jpg")
         
@@ -146,14 +147,14 @@ class Dashboards:
 
         member_images = []
 
-        self.createImages(first_place, 550, 140, self.canvas, member_images, 0, 0, 0)
+        self.createImages(first_place, 600, 280, 200, self.canvas, member_images, 0, 0, 0, 0)
         self.canvas.create_text(600, 410, text=str(first_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
 
-        self.createImages(second_place, 280, 190, self.canvas, member_images, 0, 0, 0)  
+        self.createImages(second_place, 330, 350, 200, self.canvas, member_images, 0, 0, 0, 0)  
         self.canvas.create_text(330, 480, text=str(second_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
         
-        self.canvas.create_text(880, 510, text=str(third_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
-        self.createImages(third_place, 815, 250, self.canvas, member_images, 0, 0, 0)
+        #self.canvas.create_text(880, 510, text=str(third_exercises) + " pontos", font=("arial.ttf", 20, "bold"), fill="black")
+        #self.createImages(third_place, 880, 380, 200, self.canvas, member_images, 0, 0, 0, 0)
 
         self.save_canvas_as_image(self.canvas, str(self.week) + "/rankingGrupsAccum.jpg")
         
@@ -171,7 +172,8 @@ class Dashboards:
         self.canvas.create_text(600, 150, text=str (first_exercises) + " exercícios", font=("Arial", 40))
         
         member_images = []
-        self.createImages(first_place, 300, -220, self.canvas, member_images, 3, 300, 450)
+        member_size = 300
+        self.createImages(first_place, 600, 600, 200, self.canvas, member_images, len(first_place), 0, 450, member_size)
 
         # Exibir a interface gráfica
         self.save_canvas_as_image(self.canvas, str(self.week) + "/Destaque.jpg")
@@ -193,16 +195,14 @@ class Dashboards:
         
         
         self.canvas.create_text(600, 220, text=str(first_exercises) + " exercicios", font=("Arial", 40), fill="white")
-        print (first_group)
         member_images = []
-        self.createImages([first_group], 600, 350, self.canvas, member_images, 1, 400, 520)
+        self.createImages([first_group], 600, 500, 500, self.canvas, member_images, 1, 0, 0, 0)
 
         # Exibir a interface gráfica
         self.save_canvas_as_image(self.canvas, str(self.week) + "/rankingGroup.jpg")
         #root.mainloop()
         
     def create_window_shame(self, shame_people):
-        print(shame_people)
         self.canvas.delete("all")
         # Adicionar o fundo do pódio
         podium_bg = self.load_image("pics/vergonha.jpg", size=(1200, 800))
@@ -211,19 +211,39 @@ class Dashboards:
         self.canvas.create_text(600, 80, text="Parede da vergonha", font=("arial.ttf", 60, "bold"), fill="white")
         self.canvas.create_line(100, 115, 1100, 115, fill="white", width=2)
         
-        #self.canvas.create_text(600, 150, text=str (shame_people) + " exercícios", font=("Arial", 40))
+        self.canvas.create_text(600, 150, text="Não cumpriram a meta", font=("Arial", 30), fill="white")
         
         shame_list = []
         for  value in shame_people:
-            print (value)
             shame_list.append(value["name"]) 
     
         member_images = []
-        self.createImages(shame_list, 300, -220, self.canvas, member_images, 3, 300, 450)
+        self.createImages(shame_list, 250, 350, 300, self.canvas, member_images, 2, 0, 0, 0)
 
         # Exibir a interface gráfica
         self.save_canvas_as_image(self.canvas, str(self.week) + "/Mural_vergonha.jpg")
         #root.mainloop()
+        
+    def create_window_carregados(self, carregados):
+        self.canvas.delete("all")
+        podium_bg = self.load_image("pics/carregado.jpg", size=(1200, 800))
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=podium_bg)
+        self.canvas.create_text(600, 80, text="Carregados da semana", font=("arial.ttf", 61, "bold"), fill="light gray")
+        self.canvas.create_text(600, 80, text="Carregados da semana", font=("arial.ttf", 60, "bold"), fill="white")
+        self.canvas.create_line(100, 115, 1100, 115, fill="white", width=2)
+        
+        self.canvas.create_text(600, 140, text="Dava pra fazer 3+ né?", font=("arial.ttf", 30, "bold"), fill="white")
+        #self.canvas.create_text(600, 150, text=str (shame_people) + " exercícios", font=("Arial", 40))
+        shame_list = []
+        for  value in carregados:
+            shame_list.append(value["name"]) 
+    
+        member_images = []
+        self.createImages(shame_list, 680, 300, 200, self.canvas, member_images, 0, 0, 0, 0)
+        #self.createImages(shame_list, 680, 350, 300, self.canvas, member_images, 0, 0, 0, 0)
+        
+        # Exibir a interface gráfica
+        self.save_canvas_as_image(self.canvas, str(self.week) + "/carregados.jpg")
         
     # Função para carregar e exibir uma imagem
     def load_image(self, image_path, size=(100, 100)):
@@ -232,60 +252,69 @@ class Dashboards:
         return ImageTk.PhotoImage(img)
 
     def save_canvas_as_image(self, canvas, filename, dpi=300):
-        # Força a atualização da interface gráfica antes de capturar
+        # Força atualização da interface gráfica
         self.canvas.update()
-        
-        # Salva o conteúdo do canvas em um arquivo PostScript
+
+        # Salva o conteúdo do canvas como PostScript com tamanho real
         ps_filename = "temp_canvas.ps"
-        self.canvas.postscript(file=ps_filename, colormode="color")
+        self.canvas.postscript(
+            file=ps_filename, colormode="color",
+            height=canvas.winfo_height(), width=canvas.winfo_width(),
+            pagewidth=str(canvas.winfo_width())+"p",
+            pageheight=str(canvas.winfo_height())+"p"
+        )
 
-        # Abre a imagem PostScript usando Pillow
-        img = Image.open(ps_filename)
+        # Abre a imagem PostScript com Pillow
+        img = Image.open(ps_filename).convert("RGB")
 
-        # Remove espaços vazios ao redor do conteúdo
-        #img = img.convert("RGB").crop(img.getbbox())
+        # Ajusta a resolução corretamente para DPI alto
         width, height = img.size
-        new_width = width * dpi // 72  # Ajuste a largura com base no DPI
-        new_height = height * dpi // 72 
+        new_width = int(width * dpi / 72)  # Corrige com base no DPI
+        new_height = int(height * dpi / 72)
         img = img.resize((new_width, new_height), Image.LANCZOS)
-        
-        img = img.filter(ImageFilter.SMOOTH)
-        # Redimensiona para aumentar a qualidade
-        #img = ImageOps.scale(img, scale)
+
+        # Aplica um filtro para suavizar a imagem
+        img = img.filter(ImageFilter.SMOOTH_MORE)
 
         # Salva no formato desejado
-        img.save(filename, "PNG")
-        print(f"Imagem salva como {filename}")
-
-    def createImages(self, place_list, first_x, first_y, canvas, member_images, force_square, force_ratio, force_y):
+        img.save(filename, "PNG", dpi=(dpi, dpi))
+        print(f"Imagem salva com qualidade alta em {filename}")
+    
+    def createImages(self, place_list, center_x, center_y, ratio, canvas, member_images, force_square, force_x, force_y, force_ratio):
         length = len(place_list)
-        if length % 2 != 0: length = length - 1
-        
-        square = math.ceil( (math.sqrt( len(place_list) )) )
+
+        square = math.ceil( (math.sqrt( length )) )
         if force_square != 0: square = force_square
         
-        size_ratio = int (200/square)
+        size_ratio = int (ratio/square)
         if force_ratio != 0: size_ratio = force_ratio
         
-        x = first_x - len(place_list) /2 * (square - 1)
-        y = first_y - len(place_list) /2 * square
+        x = center_x - 1/2 * (square - 1) * size_ratio
+        y = center_y - 1/2 * (square - 1) * size_ratio
         if force_y != 0: y = force_y
+        if force_x != 0: x = force_x
+        initial_x = x
+        inital_y = y
         
         i = 0
         
         for member in place_list:
-            if (i == len(place_list) - 1 and i % square == 0 and i != 0):
+            if (i == 0):
+                x = initial_x
+                y = inital_y
+                
+            elif (i == length - 1 and i % square == 0):
                 y = y + size_ratio
-                x = first_x + size_ratio / 2
+                x = initial_x
+                
             elif (i % square == 0):
                 y = y + size_ratio
-                if force_y != 0: y = force_y
-                x = first_x - len(place_list) /2 * (square - 1)
+                x = initial_x
+                
             else:
                 x = x + size_ratio
                 
             i = i + 1
-            print (member)
             image = self.load_image("pics/" + member + ".jpg", size=(size_ratio, size_ratio))
             member_images.append(image)  # Armazenar a imagem na lista
             self.canvas.create_image(x, y, anchor=tk.CENTER, image=image)

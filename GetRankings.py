@@ -10,6 +10,7 @@ class GetRankings:
         self.ranking_individual = self.calculate_ranking_individual()
         self.ranking_group = self.calculate_ranking_group()
         self.failed_individual = self.calculate_unmet_goals()
+        self.carregados = self.calculate_carregados()
         #self.failed_group = get_unmetGroup_goals(result)  
     
     def calculate_ranking_individual(self):
@@ -117,7 +118,6 @@ class GetRankings:
             csv_writer.writerow(["Unmet Goals"])
             for member in unmet:
                 csv_writer.writerow([member["name"], member["exercises"], member["goal"]])
-        print (unmet)
         return unmet
     
     def get_failed_individual(self):
@@ -133,4 +133,14 @@ class GetRankings:
                 csv_writer.writerow(group)
         return ((name, data["total"], data["meta"]) for name, data in groups.items() if data["total"] < data["meta"])
 
-
+    def calculate_carregados(self):
+        print (self.results.values())
+        carregados = [
+            member for group in self.results.values() 
+            for member in group["members"] 
+            if member["exercises"] <= 2 and member["goal"] <=2 and member["goal"] != 0
+        ]
+        return carregados
+        
+    def get_carregados(self):
+        return self.carregados
