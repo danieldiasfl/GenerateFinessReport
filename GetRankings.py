@@ -138,7 +138,7 @@ class GetRankings:
         carregados = [
             member for group in self.results.values() 
             for member in group["members"] 
-            if member["exercises"] <= 2 and member["goal"] <=2 and member["goal"] != 0
+            if member["exercises"] < 3 and member["goal"] != 0 
         ]
         return carregados
         
