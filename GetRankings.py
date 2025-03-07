@@ -11,6 +11,7 @@ class GetRankings:
         self.ranking_group = self.calculate_ranking_group()
         self.failed_individual = self.calculate_unmet_goals()
         self.carregados = self.calculate_carregados()
+        self.tierRank = self.calculateTiers()
         #self.failed_group = get_unmetGroup_goals(result)  
     
     def calculate_ranking_individual(self):
@@ -106,7 +107,6 @@ class GetRankings:
 
         # Ordenar os grupos pelo total acumulado em ordem decrescente
         points = sorted(group_scores.items(), key=lambda x: x[1], reverse=True)
-        print (points)
         # Atribuir pontos de acordo com as regras
   
         return points
@@ -134,13 +134,47 @@ class GetRankings:
         return ((name, data["total"], data["meta"]) for name, data in groups.items() if data["total"] < data["meta"])
 
     def calculate_carregados(self):
-        print (self.results.values())
         carregados = [
             member for group in self.results.values() 
             for member in group["members"] 
             if member["exercises"] < 3 and member["goal"] != 0 
         ]
         return carregados
+        
+    def calculateTiers(self):
+        scores = {}
+        for weekNumber in range(1, int(self.week) + 1):
+            with open(str (weekNumber) + '/out_individual' + '.csv', 'r', encoding='utf-8') as file:
+                reader = csv.reader(file)
+                next(reader)  # Pular o cabeçalho
+
+                i = 0
+                for row in reader:
+                    individual_name = row[0]
+                    total = float(row[1])
+                    goal = row[2]
+                    if individual_name not in scores:
+                        scores[individual_name] = {'week': 0, 'total': 0}
+                
+                    if int(goal) != 0:
+                        scores[individual_name]['week'] += 1
+                        scores[individual_name]['total'] += total
+                        
+                    i = i + 1
+            print(scores)
+        
+        for person in scores:
+            print (person)
+            scores[person]['result'] = int(scores[person]['total']) / int(scores[person]['week'])
+        sorted_scores = dict(sorted(scores.items(), key=lambda item: item[1]['result'], reverse=True))
+        print (sorted_scores)
+        
+        with open('sorted_results.csv', 'w', encoding='utf-8', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Name', 'Result'])
+            for name, data in sorted_scores.items():
+                writer.writerow([name, data['result']])
+        
         
     def get_carregados(self):
         return self.carregados

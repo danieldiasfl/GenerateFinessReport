@@ -26,13 +26,16 @@ class Dashboards:
         #create_unmet(failed, canvas)
     
     def create_dashboards(self, rankings):
-        #self.create_ranking_individual(rankings.get_ranking_individual())
-        #self.create_ranking_group(rankings.get_ranking_group())
-        #self.create_ranking_accumulated(rankings.get_accumulated_individual())
+        self.create_ranking_individual(rankings.get_ranking_individual())
+        self.create_ranking_group(rankings.get_ranking_group())
+        self.create_ranking_accumulated(rankings.get_accumulated_individual())
         self.create_ranking_accumulated_group(rankings.get_accumulated_group())
-        #self.create_shame_wall(rankings.get_failed_individual())
-        #self.create_carregados(rankings.get_carregados())
+        self.create_shame_wall(rankings.get_failed_individual())
+        self.create_carregados(rankings.get_carregados())
+        self.create_out(rankings.get_ranking_individual())
         #self.create_specialthanks()
+        #self.create_rest()
+        print(1)
         
 
     def create_ranking_individual (self, ranking):
@@ -76,13 +79,14 @@ class Dashboards:
         second_place = ([member[0] for member in ranking if member[1] == second_exercises])
         
         third_index = second_index + len(second_place)
-        print (third_index)
         third_exercises = ranking[third_index][1]
-        print (third_exercises)
         third_place = ([member[0] for member in ranking if member[1] == third_exercises])
-        print (third_place)
         self.create_window_ranking_group_accum(first_exercises, first_place, second_exercises, second_place, third_exercises, third_place, self.canvas)        
            
+    def create_out(self, ranking):
+        no_exercises = ([member['name'] for member in ranking if member['goal'] == 0])
+        self.create_window_out(no_exercises)
+        
     def create_shame_wall(self, shame_people):
         self.create_window_shame(shame_people)
     
@@ -107,6 +111,27 @@ class Dashboards:
         self.createImages(thanked2, 600, 460, 200, self.canvas, member_images, 0, 0, 0, 75)
         self.createImages(thanked, 600, 280, 200, self.canvas, member_images, 0, 0, 0, 0)
         self.canvas.create_text(600, 520, text="Por carregarem o Junebilos essa semana", font=("arial.ttf", 20, "bold"), fill="black")
+        
+        self.save_canvas_as_image(self.canvas, str(self.week) + "/thanks.jpg")
+        
+    def create_rest (self):
+        self.canvas.delete("all")
+        podium_bg = self.load_image("pics/descanso.jpg", size=(1200, 800))
+        # Adicionar o fundo do pódio
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=podium_bg)
+        #self.canvas.create_text(600, 80, text="Agradecimento Especial", font=("arial.ttf", 60, "bold"), fill="gray")
+        #self.canvas.create_text(598, 79, text="Agradecimento Especial", font=("arial.ttf", 60, "bold"), fill="white")
+        #self.canvas.create_line(100, 115, 1100, 115, fill="white", width=2)
+        
+
+        member_images = []
+        thanked1 = ["Vivi", "Nene", "Cinthia", "Issamu"]
+        thanked = ["Gabi", "Ander", "Van"]
+        #thanked2 = [ "Naomi", "Nelso" ]
+        self.createImages(thanked1, 1400, 200, 200, self.canvas, member_images, 0, 0, 0, 0)
+        #self.createImages(thanked2, 600, 460, 200, self.canvas, member_images, 0, 0, 0, 75)
+        self.createImages(thanked, 1400, 400, 200, self.canvas, member_images, 0, 0, 0, 0)
+        #self.canvas.create_text(600, 520, text="Por carregarem o Junebilos essa semana", font=("arial.ttf", 20, "bold"), fill="black")
         
         self.save_canvas_as_image(self.canvas, str(self.week) + "/thanks.jpg")
         
@@ -267,6 +292,25 @@ class Dashboards:
         
         # Exibir a interface gráfica
         self.save_canvas_as_image(self.canvas, str(self.week) + "/carregados.jpg")
+
+    def create_window_out(self, list):
+        self.canvas.delete("all")
+        podium_bg = self.load_image("pics/sick.jpg", size=(1200, 800))
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=podium_bg)
+        self.canvas.create_text(600, 80, text="Fora de combate", font=("arial.ttf", 60, "bold"), fill="dark grey")
+        self.canvas.create_text(598, 79, text="Fora de combate", font=("arial.ttf", 60, "bold"), fill="white")
+        self.canvas.create_line(100, 115, 1100, 115, fill="white", width=2)
+        #self.canvas.create_text(600, 150, text=str (shame_people) + " exercícios", font=("Arial", 40))
+        shame_list = []
+        for  value in list:
+            shame_list.append(value) 
+    
+        member_images = []
+        self.createImages(shame_list, 560, 480, 400, self.canvas, member_images, 0, 0, 0, 0)
+        #self.createImages(shame_list, 680, 350, 300, self.canvas, member_images, 0, 0, 0, 0)
+        
+        # Exibir a interface gráfica
+        self.save_canvas_as_image(self.canvas, str(self.week) + "/out.jpg")
         
     # Função para carregar e exibir uma imagem
     def load_image(self, image_path, size=(100, 100)):

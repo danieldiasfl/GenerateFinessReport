@@ -16,8 +16,10 @@ def main():
     rankings = GetRankings(parsed_results.get_result(), args.week)
     
     #accumulated_rankings
+    print("----------------------------------------------------")
+    print("RANKINGS: ")
     print(rankings.get_accumulated_individual())
-    
+    print("----------------------------------------------------")
     Dashboards(rankings, args.week)
     
 if __name__ == "__main__":
